@@ -11,25 +11,118 @@ public class MainFrame extends javax.swing.JFrame
     {
         // GUI Configuration
         this.initComponents();
+
+        // Plots creation
+        this.plotSignalSerieFourier = new SignalPanel("Signal de départ et série de Fourier", null, null);
+        this.panelPlots.add(this.plotSignalSerieFourier);
+
+        this.plotSpectreSerieFourier = new SignalPanel("Spectre de la série de Fourier", null, null);
+        this.panelPlots.add(this.plotSpectreSerieFourier);
+
+        this.plotRealPartTFSerieF = new SignalPanel("Partie réelle de la transformée de Fourier de la série de Fourier", null, null);
+        this.panelPlots.add(this.plotRealPartTFSerieF);
+
+        this.plotImaginaryPartTFSerieF = new SignalPanel("Partie imaginaire de la transformée de Fourier de la série de Fourier", null, null);
+        this.panelPlots.add(this.plotImaginaryPartTFSerieF);
+
+        this.plotPhaseTFSerieF = new SignalPanel("Phase de la transformée de Fourier de la série de Fourier", null, null);
+        this.panelPlots.add(this.plotPhaseTFSerieF);
+
+        // Resize window to fit the preferred sizes and layouts
+        this.pack();
     }
     //</editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents()
     {
+        java.awt.GridBagConstraints gridBagConstraints;
+
+        splitPaneMainFrame = new javax.swing.JSplitPane();
+        panelOptions = new javax.swing.JPanel();
+        panelDiscretiseur = new javax.swing.JPanel();
+        labelSamples = new javax.swing.JLabel();
+        labelOrigine = new javax.swing.JLabel();
+        labelDuree = new javax.swing.JLabel();
+        spinnerSamplesDisc = new javax.swing.JSpinner();
+        spinnerOrigineDisc = new javax.swing.JSpinner();
+        spinnerDureeDisc = new javax.swing.JSpinner();
+        panelPlots = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Mathématiques Appliquées - Dossier 1");
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        splitPaneMainFrame.setOneTouchExpandable(true);
+
+        panelOptions.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
+        panelOptions.setLayout(new java.awt.GridBagLayout());
+
+        panelDiscretiseur.setBorder(javax.swing.BorderFactory.createTitledBorder("Paramètres du discretiseur"));
+        java.awt.GridBagLayout panelDiscretiseurLayout = new java.awt.GridBagLayout();
+        panelDiscretiseurLayout.columnWidths = new int[] {0, 5, 0};
+        panelDiscretiseurLayout.rowHeights = new int[] {0, 3, 0, 3, 0};
+        panelDiscretiseur.setLayout(panelDiscretiseurLayout);
+
+        labelSamples.setText("Samples :");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        panelDiscretiseur.add(labelSamples, gridBagConstraints);
+
+        labelOrigine.setText("Origine :");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        panelDiscretiseur.add(labelOrigine, gridBagConstraints);
+
+        labelDuree.setText("Durée :");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        panelDiscretiseur.add(labelDuree, gridBagConstraints);
+
+        spinnerSamplesDisc.setModel(new javax.swing.SpinnerNumberModel(4096, 64, 4096, 1));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        panelDiscretiseur.add(spinnerSamplesDisc, gridBagConstraints);
+
+        spinnerOrigineDisc.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(0.0d), null, null, Double.valueOf(0.1d)));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        panelDiscretiseur.add(spinnerOrigineDisc, gridBagConstraints);
+
+        spinnerDureeDisc.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(1.0d), Double.valueOf(0.0d), null, Double.valueOf(0.1d)));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        panelDiscretiseur.add(spinnerDureeDisc, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        panelOptions.add(panelDiscretiseur, gridBagConstraints);
+
+        splitPaneMainFrame.setLeftComponent(panelOptions);
+
+        panelPlots.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
+        panelPlots.setLayout(new java.awt.GridLayout(2, 2, 3, 3));
+        splitPaneMainFrame.setRightComponent(panelPlots);
+
+        getContentPane().add(splitPaneMainFrame, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -80,7 +173,24 @@ public class MainFrame extends javax.swing.JFrame
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Variables declaration">
+
+    private final SignalPanel plotSignalSerieFourier;
+    private final SignalPanel plotSpectreSerieFourier;
+    private final SignalPanel plotRealPartTFSerieF;
+    private final SignalPanel plotImaginaryPartTFSerieF;
+    private final SignalPanel plotPhaseTFSerieF;
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel labelDuree;
+    private javax.swing.JLabel labelOrigine;
+    private javax.swing.JLabel labelSamples;
+    private javax.swing.JPanel panelDiscretiseur;
+    private javax.swing.JPanel panelOptions;
+    private javax.swing.JPanel panelPlots;
+    private javax.swing.JSpinner spinnerDureeDisc;
+    private javax.swing.JSpinner spinnerOrigineDisc;
+    private javax.swing.JSpinner spinnerSamplesDisc;
+    private javax.swing.JSplitPane splitPaneMainFrame;
     // End of variables declaration//GEN-END:variables
     //</editor-fold>
 }
