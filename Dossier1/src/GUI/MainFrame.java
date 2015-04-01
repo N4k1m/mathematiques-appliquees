@@ -1,5 +1,7 @@
 package GUI;
 
+import java.awt.GridBagConstraints;
+
 /**
  *
  * @author Nakim
@@ -13,20 +15,46 @@ public class MainFrame extends javax.swing.JFrame
         this.initComponents();
 
         // Plots creation
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH; // Maximum width and height
+        gbc.weightx = 1;
+        gbc.weighty = 1;
+
+
         this.plotSignalSerieFourier = new SignalPanel("Signal de départ et série de Fourier", null, null);
-        this.panelPlots.add(this.plotSignalSerieFourier);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.weightx = 2;
+        this.panelPlots.add(this.plotSignalSerieFourier, gbc);
 
         this.plotSpectreSerieFourier = new SignalPanel("Spectre de la série de Fourier", null, null);
-        this.panelPlots.add(this.plotSpectreSerieFourier);
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        gbc.gridwidth = 1;
+        gbc.weightx = 1;
+        this.panelPlots.add(this.plotSpectreSerieFourier, gbc);
 
         this.plotRealPartTFSerieF = new SignalPanel("Partie réelle de la transformée de Fourier de la série de Fourier", null, null);
-        this.panelPlots.add(this.plotRealPartTFSerieF);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        gbc.weightx = 1;
+        this.panelPlots.add(this.plotRealPartTFSerieF, gbc);
 
         this.plotImaginaryPartTFSerieF = new SignalPanel("Partie imaginaire de la transformée de Fourier de la série de Fourier", null, null);
-        this.panelPlots.add(this.plotImaginaryPartTFSerieF);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        gbc.weightx = 1;
+        this.panelPlots.add(this.plotImaginaryPartTFSerieF, gbc);
 
         this.plotPhaseTFSerieF = new SignalPanel("Phase de la transformée de Fourier de la série de Fourier", null, null);
-        this.panelPlots.add(this.plotPhaseTFSerieF);
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
+        gbc.weightx = 1;
+        this.panelPlots.add(this.plotPhaseTFSerieF, gbc);
 
         // Resize window to fit the preferred sizes and layouts
         this.pack();
@@ -119,7 +147,7 @@ public class MainFrame extends javax.swing.JFrame
         splitPaneMainFrame.setLeftComponent(panelOptions);
 
         panelPlots.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
-        panelPlots.setLayout(new java.awt.GridLayout(2, 2, 3, 3));
+        panelPlots.setLayout(new java.awt.GridBagLayout());
         splitPaneMainFrame.setRightComponent(panelPlots);
 
         getContentPane().add(splitPaneMainFrame, java.awt.BorderLayout.CENTER);
@@ -146,19 +174,7 @@ public class MainFrame extends javax.swing.JFrame
                 }
             }
         }
-        catch (ClassNotFoundException ex)
-        {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (InstantiationException ex)
-        {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (IllegalAccessException ex)
-        {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (javax.swing.UnsupportedLookAndFeelException ex)
+        catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex)
         {
             java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
