@@ -14,5 +14,9 @@ hs_err_pid*
 /LibSignals/build/
 /LibSignals/dist/
 
+/Dossier1/nbproject/private/
+/Dossier1/dist/
+/Dossier1/build/
+
 # Mac OS X
 .DS_Store
