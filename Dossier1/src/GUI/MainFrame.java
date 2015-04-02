@@ -2,10 +2,19 @@ package GUI;
 
 import Fonctions.FonctionA;
 import Fonctions.FonctionB;
+import Fonctions.FonctionSerieFourier;
+import Fourier.CarreSerieFourier;
+import Fourier.DentsScieSerieFourier;
+import Fourier.FonctionASerieFourier;
+import Fourier.FonctionBSerieFourier;
+import Fourier.SerieFourier;
 import Utils.MessageBoxes;
 import java.awt.GridBagConstraints;
+import math.Nombre;
+import operations.SignalOperations;
 import signaux.Discretiseur;
 import signaux.Signal;
+import signaux.SignalAnalogique;
 import signaux.SignalPeriodique;
 
 /**
@@ -311,6 +320,7 @@ public class MainFrame extends javax.swing.JFrame
             // Get signal parameters
             double periode = (double)this.spinnerPeriode.getValue();
             double amplitude = (double)this.spinnerAmplitude.getValue();
+            SerieFourier sf;
 
             // Create signal
             String signalType = String.valueOf(this.comboBoxSignaux.getSelectedItem());
@@ -319,18 +329,22 @@ public class MainFrame extends javax.swing.JFrame
                 case "Carré":
                     this.signal = SignalPeriodique.getInstance(
                             SignalPeriodique.CARRE, amplitude,1/periode, 0.0, discretiseur);
+                    sf = new CarreSerieFourier();
                     break;
                 case "Dents de scie":
                     this.signal = SignalPeriodique.getInstance(
                             SignalPeriodique.SCIE, amplitude, 1/periode, 0.0, discretiseur);
+                    sf = new DentsScieSerieFourier();
                     break;
                 case "Fonction A (exercice)":
                     this.signal = SignalPeriodique.getInstance(
                             new FonctionA(amplitude, 1/periode, 0.0), discretiseur);
+                    sf = new FonctionASerieFourier();
                     break;
                 case "Fonction B (exercice)":
                     this.signal = SignalPeriodique.getInstance(
                             new FonctionB(amplitude, 1/periode, 0.0), discretiseur);
+                    sf = new FonctionBSerieFourier();
                     break;
                 default:
                     throw new Exception("Signal non reconnu");
@@ -338,6 +352,31 @@ public class MainFrame extends javax.swing.JFrame
             
             // Display signal
             this.plotSignalSerieFourier.addSignal(this.signal, signalType, true);
+            
+            // Serie de fourier
+            int n = (int)this.spinnerNbTermesSerieFourier.getValue();
+            Signal serieFourier = SignalPeriodique.getInstance(new FonctionSerieFourier(amplitude, 1/periode, 0.0, sf, n), discretiseur);
+            
+            /*Signal a0 = SignalAnalogique.getInstance(SignalAnalogique.CONSTANT, new Nombre(sf.getCoefficientA0(), 0), discretiseur);
+            Signal somme = null;
+            for (int i = 1; i <= n; i++)
+            {
+            Signal tmp;
+            Signal cos = SignalPeriodique.getInstance(SignalPeriodique.COSINUS, sf.getCoefficientAn(i)*amplitude, (1/periode)*i, 0.0, discretiseur);
+            Signal sin = SignalPeriodique.getInstance(SignalPeriodique.SINUS, sf.getCoefficientBn(i)* amplitude, (1/periode)*i, 0.0, discretiseur);
+            
+            tmp = SignalOperations.somme(cos, sin);
+            
+            if (somme == null)
+            somme = tmp;
+            else
+            somme = SignalOperations.somme(somme, tmp);
+            }
+            
+            Signal serieFourier = SignalOperations.somme(a0, somme);*/
+            
+            
+            this.plotSignalSerieFourier.addSignal(serieFourier, "SF " + signalType + " (N = " + String.valueOf(n)+ ")", false);
         }
         catch (Exception ex)
         {
