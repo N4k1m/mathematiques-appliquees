@@ -328,75 +328,48 @@ public class MainFrame extends javax.swing.JFrame
             int samples = (int)spinnerSamplesDisc.getValue();
             double origine = (double)this.spinnerOrigineDisc.getValue();
             double duree = (double)this.spinnerDureeDisc.getValue();
-            Discretiseur discretiseur = new Discretiseur(samples, origine, duree);
+            this.discretiseur = new Discretiseur(samples, origine, duree);
 
             // Get signal parameters
-            double periode = (double)this.spinnerPeriode.getValue();
-            double amplitude = (double)this.spinnerAmplitude.getValue();
-            SerieFourier sf;
+            periode = (double)this.spinnerPeriode.getValue();
+            amplitude = (double)this.spinnerAmplitude.getValue();
+
+            // Get Fourier serie parameters
+            int n = (int)this.spinnerNbTermesSerieFourier.getValue();
 
             // Create signal
-            String signalType = String.valueOf(this.comboBoxSignaux.getSelectedItem());
+            signalType = String.valueOf(this.comboBoxSignaux.getSelectedItem());
             switch(signalType)
             {
                 case "Carré":
                     this.signal = SignalPeriodique.getInstance(
                             SignalPeriodique.CARRE, amplitude,1/periode, 0.0, discretiseur);
-                    sf = new CarreSerieFourier();
+                    serieFourier = new CarreSerieFourier();
                     break;
                 case "Dents de scie":
                     this.signal = SignalPeriodique.getInstance(
                             SignalPeriodique.SCIE, amplitude, 1/periode, 0.0, discretiseur);
-                    sf = new DentsScieSerieFourier();
+                    serieFourier = new DentsScieSerieFourier();
                     break;
                 case "Fonction A (exercice)":
                     this.signal = SignalPeriodique.getInstance(
                             new FonctionA(amplitude, 1/periode, 0.0), discretiseur);
-                    sf = new FonctionASerieFourier();
+                    serieFourier = new FonctionASerieFourier();
                     break;
                 case "Fonction B (exercice)":
                     this.signal = SignalPeriodique.getInstance(
                             new FonctionB(amplitude, 1/periode, 0.0), discretiseur);
-                    sf = new FonctionBSerieFourier();
+                    serieFourier = new FonctionBSerieFourier();
                     break;
                 default:
                     throw new Exception("Signal non reconnu");
             }
 
-            // Fourier series
-            int n = (int)this.spinnerNbTermesSerieFourier.getValue();
-            Signal fourierSerie = FourierSeriesBuilder.fourierSerie(sf, n, amplitude, periode, discretiseur);
-            this.plotSignalSerieFourier.addSignal(fourierSerie, "SF " + signalType + " (N = " + String.valueOf(n)+ ")", false);
+            // Display Fourier series signals
+            this.appendFourierSeriesSignals(n);
 
             // Display signal
             this.plotSignalSerieFourier.addSignal(this.signal, signalType, false);
-
-             // Get Fourier transformation of Fourier serie
-            Signal TFFourierSerie = Fourier.fourier(fourierSerie);
-
-            // Spectre
-            this.plotSpectreSerieFourier.addSignal(
-                TFFourierSerie.module(),
-                "SF " + signalType + " (N = " + String.valueOf(n)+ ")",
-                false);
-
-            // Phase
-            this.plotPhaseTFSerieF.addSignal(
-                TFFourierSerie.argument(),
-                "SF " + signalType + " (N = " + String.valueOf(n)+ ")",
-                false);
-
-            // Real part
-            this.plotRealPartTFSerieF.addSignal(
-                TFFourierSerie.partieReelle(),
-                "SF " + signalType + " (N = " + String.valueOf(n)+ ")",
-                false);
-
-            // Imaginary part
-            this.plotImaginaryPartTFSerieF.addSignal(
-                TFFourierSerie.partieImaginaire(),
-                "SF " + signalType + " (N = " + String.valueOf(n)+ ")",
-                false);
         }
         catch (Exception ex)
         {
@@ -408,68 +381,10 @@ public class MainFrame extends javax.swing.JFrame
     {//GEN-HEADEREND:event_buttonAjouterSerieFourierActionPerformed
         try
         {
-            // Get discretiseur parameters
-            int samples = (int)spinnerSamplesDisc.getValue();
-            double origine = (double)this.spinnerOrigineDisc.getValue();
-            double duree = (double)this.spinnerDureeDisc.getValue();
-            Discretiseur discretiseur = new Discretiseur(samples, origine, duree);
-
-            // Get signal parameters
-            double periode = (double)this.spinnerPeriode.getValue();
-            double amplitude = (double)this.spinnerAmplitude.getValue();
-            SerieFourier sf;
-
-            // Create signal
-            String signalType = String.valueOf(this.comboBoxSignaux.getSelectedItem());
-            switch(signalType)
-            {
-                case "Carré":
-                    sf = new CarreSerieFourier();
-                    break;
-                case "Dents de scie":
-                    sf = new DentsScieSerieFourier();
-                    break;
-                case "Fonction A (exercice)":
-                    sf = new FonctionASerieFourier();
-                    break;
-                case "Fonction B (exercice)":
-                    sf = new FonctionBSerieFourier();
-                    break;
-                default:
-                    throw new Exception("Signal non reconnu");
-            }
-
-            // Fourier serie
+            // Get the number of terms of the Fourier serie
             int n = (int)this.spinnerNbTermesSerieFourier.getValue();
-            Signal fourierSerie = FourierSeriesBuilder.fourierSerie(sf, n, amplitude, periode, discretiseur);
-            this.plotSignalSerieFourier.addSignal(fourierSerie, "SF " + signalType + " (N = " + String.valueOf(n)+ ")", false);
 
-            // Get Fourier transformation of Fourier serie
-            Signal TFFourierSerie = Fourier.fourier(fourierSerie);
-
-            // Spectre
-            this.plotSpectreSerieFourier.addSignal(
-                TFFourierSerie.module(),
-                "SF " + signalType + " (N = " + String.valueOf(n)+ ")",
-                false);
-
-            // Phase
-            this.plotPhaseTFSerieF.addSignal(
-                TFFourierSerie.argument(),
-                "SF " + signalType + " (N = " + String.valueOf(n)+ ")",
-                false);
-
-            // Real part
-            this.plotRealPartTFSerieF.addSignal(
-                TFFourierSerie.partieReelle(),
-                "SF " + signalType + " (N = " + String.valueOf(n)+ ")",
-                false);
-
-            // Imaginary part
-            this.plotImaginaryPartTFSerieF.addSignal(
-                TFFourierSerie.partieImaginaire(),
-                "SF " + signalType + " (N = " + String.valueOf(n)+ ")",
-                false);
+            this.appendFourierSeriesSignals(n);
         }
         catch (Exception ex)
         {
@@ -479,9 +394,38 @@ public class MainFrame extends javax.swing.JFrame
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Private Functions">
-    private void appendFourierSerie() throws Exception
+    private void appendFourierSeriesSignals(int n)
     {
+        // Fourier serie
+        Signal fourierSerie = FourierSeriesBuilder.fourierSerie(serieFourier, n, amplitude, periode, discretiseur);
+        this.plotSignalSerieFourier.addSignal(fourierSerie, "SF " + signalType + " (N = " + String.valueOf(n)+ ")", false);
 
+        // Get Fourier transformation of Fourier serie
+        Signal TFFourierSerie = Fourier.fourier(fourierSerie);
+
+        // Spectre
+        this.plotSpectreSerieFourier.addSignal(
+            TFFourierSerie.module(),
+            "SF " + signalType + " (N = " + String.valueOf(n)+ ")",
+            false);
+
+        // Phase
+        this.plotPhaseTFSerieF.addSignal(
+            TFFourierSerie.argument(),
+            "SF " + signalType + " (N = " + String.valueOf(n)+ ")",
+            false);
+
+        // Real part
+        this.plotRealPartTFSerieF.addSignal(
+            TFFourierSerie.partieReelle(),
+            "SF " + signalType + " (N = " + String.valueOf(n)+ ")",
+            false);
+
+        // Imaginary part
+        this.plotImaginaryPartTFSerieF.addSignal(
+            TFFourierSerie.partieImaginaire(),
+            "SF " + signalType + " (N = " + String.valueOf(n)+ ")",
+            false);
     }
     //</editor-fold>
 
@@ -527,6 +471,13 @@ public class MainFrame extends javax.swing.JFrame
     private final SignalPanel plotPhaseTFSerieF;
 
     private Signal signal;
+    SerieFourier serieFourier;
+
+    // For a futur Fourier series generation
+    private Discretiseur discretiseur;
+    private double periode;
+    private double amplitude;
+    private String signalType;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonAfficher;
