@@ -2,7 +2,6 @@ package GUI;
 
 import Fonctions.FonctionA;
 import Fonctions.FonctionB;
-import Fonctions.FonctionSerieFourier;
 import Fourier.CarreSerieFourier;
 import Fourier.DentsScieSerieFourier;
 import Fourier.FonctionASerieFourier;
@@ -316,7 +315,7 @@ public class MainFrame extends javax.swing.JFrame
             double origine = (double)this.spinnerOrigineDisc.getValue();
             double duree = (double)this.spinnerDureeDisc.getValue();
             Discretiseur discretiseur = new Discretiseur(samples, origine, duree);
-            
+
             // Get signal parameters
             double periode = (double)this.spinnerPeriode.getValue();
             double amplitude = (double)this.spinnerAmplitude.getValue();
@@ -349,34 +348,26 @@ public class MainFrame extends javax.swing.JFrame
                 default:
                     throw new Exception("Signal non reconnu");
             }
-            
+
             // Display signal
             this.plotSignalSerieFourier.addSignal(this.signal, signalType, true);
-            
-            // Serie de fourier
+
+            // Fourier series
             int n = (int)this.spinnerNbTermesSerieFourier.getValue();
-            Signal serieFourier = SignalPeriodique.getInstance(new FonctionSerieFourier(amplitude, 1/periode, 0.0, sf, n), discretiseur);
-            
-            /*Signal a0 = SignalAnalogique.getInstance(SignalAnalogique.CONSTANT, new Nombre(sf.getCoefficientA0(), 0), discretiseur);
-            Signal somme = null;
+
+            // a_0
+            Signal fourierSerie = SignalAnalogique.getInstance(SignalAnalogique.CONSTANT, new Nombre(sf.getCoefficientA0(), 0), discretiseur);
+
+            // sum(a_n*cos(2*pi*n*f_0*t) + b_n*sin(2*pi*n*f_0*t)
             for (int i = 1; i <= n; i++)
             {
-            Signal tmp;
-            Signal cos = SignalPeriodique.getInstance(SignalPeriodique.COSINUS, sf.getCoefficientAn(i)*amplitude, (1/periode)*i, 0.0, discretiseur);
-            Signal sin = SignalPeriodique.getInstance(SignalPeriodique.SINUS, sf.getCoefficientBn(i)* amplitude, (1/periode)*i, 0.0, discretiseur);
-            
-            tmp = SignalOperations.somme(cos, sin);
-            
-            if (somme == null)
-            somme = tmp;
-            else
-            somme = SignalOperations.somme(somme, tmp);
+                Signal cos = SignalPeriodique.getInstance(SignalPeriodique.COSINUS, sf.getCoefficientAn(i)*amplitude, (1/periode)*i, 0.0, discretiseur);
+                Signal sin = SignalPeriodique.getInstance(SignalPeriodique.SINUS, sf.getCoefficientBn(i)* amplitude, (1/periode)*i, 0.0, discretiseur);
+
+                fourierSerie = SignalOperations.somme(fourierSerie, SignalOperations.somme(cos, sin));
             }
-            
-            Signal serieFourier = SignalOperations.somme(a0, somme);*/
-            
-            
-            this.plotSignalSerieFourier.addSignal(serieFourier, "SF " + signalType + " (N = " + String.valueOf(n)+ ")", false);
+
+            this.plotSignalSerieFourier.addSignal(fourierSerie, "SF " + signalType + " (N = " + String.valueOf(n)+ ")", false);
         }
         catch (Exception ex)
         {

@@ -16,14 +16,14 @@ public class FonctionSerieFourier extends FonctionPeriodique
         this.sf = sf;
         this.n = n;
     }
-    
+
     public FonctionSerieFourier(double amplitude, double frequence, double phase, SerieFourier sf, int n)
     {
         super(amplitude, frequence, phase);
         this.sf = sf;
         this.n = n;
     }
-    
+
     @Override
     public Nombre getValeur(double param)
     {
@@ -46,20 +46,17 @@ public class FonctionSerieFourier extends FonctionPeriodique
             {
                 // a_0
                 double value = this.sf.getCoefficientA0();
-                
-                // sum(a_n*cos(2*pi*n*f_0*t) + b_n*sin(2*pi*n*f_0*t)
-                double sum = 0.0;
-                for(int i = 1; i <= n; i++)
-                    sum += (this.sf.getCoefficientAn(i) * Math.cos(2*Math.PI*n*frequence*param))
-                         + (this.sf.getCoefficientBn(i) * Math.sin(2*Math.PI*n*frequence*param));
 
-                value += sum;
+                // sum(a_n*cos(2*pi*n*f_0*t) + b_n*sin(2*pi*n*f_0*t)
+                for(int i = 1; i <= n; i++)
+                    value += (this.sf.getCoefficientAn(i) * Math.cos(2*Math.PI*n*frequence*param))
+                           + (this.sf.getCoefficientBn(i) * Math.sin(2*Math.PI*n*frequence*param));
 
                 return new Nombre(value, 0.0);
             }
         }
     }
-    
+
     private final SerieFourier sf;
     private final int n;
 }
