@@ -9,8 +9,10 @@ import Fourier.FonctionBSerieFourier;
 import Fourier.FourierSeriesBuilder;
 import Fourier.SerieFourier;
 import Utils.MessageBoxes;
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import operations.Fourier;
+import org.jfree.chart.renderer.xy.XYItemRenderer;
 import signaux.Discretiseur;
 import signaux.Signal;
 import signaux.SignalPeriodique;
@@ -33,8 +35,16 @@ public class MainFrame extends javax.swing.JFrame
         gbc.weightx = 1;
         gbc.weighty = 1;
 
+        XYItemRenderer renderer;
 
         this.plotSignalSerieFourier = new SignalPanel("Signal de départ et série de Fourier (SF)", null, null);
+        renderer = this.plotSignalSerieFourier.getChartPanel().getChart().getXYPlot().getRenderer();
+        renderer.setSeriesPaint(0, Color.red);
+        renderer.setSeriesPaint(1, Color.blue);
+        renderer.setSeriesPaint(2, Color.yellow);
+        renderer.setSeriesPaint(3, Color.cyan);
+        renderer.setSeriesPaint(4, Color.magenta);
+        renderer.setSeriesPaint(5, Color.green);
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
@@ -42,6 +52,13 @@ public class MainFrame extends javax.swing.JFrame
         this.panelPlots.add(this.plotSignalSerieFourier, gbc);
 
         this.plotSpectreSerieFourier = new SignalPanel("Spectre de la série de Fourier (SF)", null, null);
+        renderer = this.plotSpectreSerieFourier.getChartPanel().getChart().getXYPlot().getRenderer();
+        renderer.setSeriesPaint(0, Color.blue);
+        renderer.setSeriesPaint(1, Color.yellow);
+        renderer.setSeriesPaint(2, Color.cyan);
+        renderer.setSeriesPaint(3, Color.magenta);
+        renderer.setSeriesPaint(4, Color.green);
+        renderer.setSeriesPaint(5, Color.red);
         gbc.gridx = 2;
         gbc.gridy = 0;
         gbc.gridwidth = 1;
@@ -49,6 +66,13 @@ public class MainFrame extends javax.swing.JFrame
         this.panelPlots.add(this.plotSpectreSerieFourier, gbc);
 
         this.plotRealPartTFSerieF = new SignalPanel("Partie réelle de la TF de la SF", null, null);
+        renderer = this.plotRealPartTFSerieF.getChartPanel().getChart().getXYPlot().getRenderer();
+        renderer.setSeriesPaint(0, Color.blue);
+        renderer.setSeriesPaint(1, Color.yellow);
+        renderer.setSeriesPaint(2, Color.cyan);
+        renderer.setSeriesPaint(3, Color.magenta);
+        renderer.setSeriesPaint(4, Color.green);
+        renderer.setSeriesPaint(5, Color.red);
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 1;
@@ -56,6 +80,13 @@ public class MainFrame extends javax.swing.JFrame
         this.panelPlots.add(this.plotRealPartTFSerieF, gbc);
 
         this.plotImaginaryPartTFSerieF = new SignalPanel("Partie imaginaire de la TF de la SF", null, null);
+        renderer = this.plotImaginaryPartTFSerieF.getChartPanel().getChart().getXYPlot().getRenderer();
+        renderer.setSeriesPaint(0, Color.blue);
+        renderer.setSeriesPaint(1, Color.yellow);
+        renderer.setSeriesPaint(2, Color.cyan);
+        renderer.setSeriesPaint(3, Color.magenta);
+        renderer.setSeriesPaint(4, Color.green);
+        renderer.setSeriesPaint(5, Color.red);
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.gridwidth = 1;
@@ -63,6 +94,13 @@ public class MainFrame extends javax.swing.JFrame
         this.panelPlots.add(this.plotImaginaryPartTFSerieF, gbc);
 
         this.plotPhaseTFSerieF = new SignalPanel("Phase de la TF de la SF", null, null);
+        renderer = this.plotPhaseTFSerieF.getChartPanel().getChart().getXYPlot().getRenderer();
+        renderer.setSeriesPaint(0, Color.blue);
+        renderer.setSeriesPaint(1, Color.yellow);
+        renderer.setSeriesPaint(2, Color.cyan);
+        renderer.setSeriesPaint(3, Color.magenta);
+        renderer.setSeriesPaint(4, Color.green);
+        renderer.setSeriesPaint(5, Color.red);
         gbc.gridx = 2;
         gbc.gridy = 1;
         gbc.gridwidth = 1;

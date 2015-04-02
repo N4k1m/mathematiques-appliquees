@@ -412,6 +412,13 @@ public class SignalPanel extends javax.swing.JPanel
     }
     //</editor-fold>
 
+    //<editor-fold defaultstate="collapsed" desc="Getters">
+    public ChartPanel getChartPanel()
+    {
+        return this.panelGraphique;
+    }
+    //</editor-fold>
+
     //<editor-fold defaultstate="collapsed" desc="Variables declaration">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton boutonCouleur;
