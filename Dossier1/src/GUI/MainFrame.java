@@ -6,14 +6,13 @@ import Fourier.CarreSerieFourier;
 import Fourier.DentsScieSerieFourier;
 import Fourier.FonctionASerieFourier;
 import Fourier.FonctionBSerieFourier;
+import Fourier.FourierSeriesBuilder;
 import Fourier.SerieFourier;
 import Utils.MessageBoxes;
 import java.awt.GridBagConstraints;
-import math.Nombre;
-import operations.SignalOperations;
+import operations.Fourier;
 import signaux.Discretiseur;
 import signaux.Signal;
-import signaux.SignalAnalogique;
 import signaux.SignalPeriodique;
 
 /**
@@ -76,7 +75,8 @@ public class MainFrame extends javax.swing.JFrame
     //</editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
         java.awt.GridBagConstraints gridBagConstraints;
 
         splitPaneMainFrame = new javax.swing.JSplitPane();
@@ -213,8 +213,10 @@ public class MainFrame extends javax.swing.JFrame
         panelSignals.add(spinnerPeriode, gridBagConstraints);
 
         buttonAfficher.setText("Afficher");
-        buttonAfficher.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        buttonAfficher.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 buttonAfficherActionPerformed(evt);
             }
         });
@@ -242,6 +244,13 @@ public class MainFrame extends javax.swing.JFrame
         panelSignals.add(spinnerNbTermesSerieFourier, gridBagConstraints);
 
         buttonAjouterSerieFourier.setText("Ajouter série Fourier");
+        buttonAjouterSerieFourier.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                buttonAjouterSerieFourierActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 10;
@@ -273,8 +282,10 @@ public class MainFrame extends javax.swing.JFrame
         panelOptions.add(panelSignals, gridBagConstraints);
 
         buttonClearAll.setText("Tout effacer");
-        buttonClearAll.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        buttonClearAll.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 buttonClearAllActionPerformed(evt);
             }
         });
@@ -308,6 +319,9 @@ public class MainFrame extends javax.swing.JFrame
 
     private void buttonAfficherActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_buttonAfficherActionPerformed
     {//GEN-HEADEREND:event_buttonAfficherActionPerformed
+        // Clear all plots
+        this.buttonClearAllActionPerformed(null);
+
         try
         {
             // Get discretiseur parameters
@@ -349,31 +363,99 @@ public class MainFrame extends javax.swing.JFrame
                     throw new Exception("Signal non reconnu");
             }
 
-            // Display signal
-            this.plotSignalSerieFourier.addSignal(this.signal, signalType, true);
-
             // Fourier series
             int n = (int)this.spinnerNbTermesSerieFourier.getValue();
-
-            // a_0
-            Signal fourierSerie = SignalAnalogique.getInstance(SignalAnalogique.CONSTANT, new Nombre(sf.getCoefficientA0(), 0), discretiseur);
-
-            // sum(a_n*cos(2*pi*n*f_0*t) + b_n*sin(2*pi*n*f_0*t)
-            for (int i = 1; i <= n; i++)
-            {
-                Signal cos = SignalPeriodique.getInstance(SignalPeriodique.COSINUS, sf.getCoefficientAn(i)*amplitude, (1/periode)*i, 0.0, discretiseur);
-                Signal sin = SignalPeriodique.getInstance(SignalPeriodique.SINUS, sf.getCoefficientBn(i)* amplitude, (1/periode)*i, 0.0, discretiseur);
-
-                fourierSerie = SignalOperations.somme(fourierSerie, SignalOperations.somme(cos, sin));
-            }
-
+            Signal fourierSerie = FourierSeriesBuilder.fourierSerie(sf, n, amplitude, periode, discretiseur);
             this.plotSignalSerieFourier.addSignal(fourierSerie, "SF " + signalType + " (N = " + String.valueOf(n)+ ")", false);
+
+            // Display signal
+            this.plotSignalSerieFourier.addSignal(this.signal, signalType, false);
+
+             // Get Fourier transformation of Fourier serie
+            Signal TFFourierSerie = Fourier.fourier(fourierSerie);
+
+            // Spectre
+            this.plotSpectreSerieFourier.addSignal(
+                TFFourierSerie.module(),
+                "SF " + signalType + " (N = " + String.valueOf(n)+ ")",
+                false);
+
+            // Phase
+            this.plotPhaseTFSerieF.addSignal(
+                TFFourierSerie.argument(),
+                "SF " + signalType + " (N = " + String.valueOf(n)+ ")",
+                false);
+
+            // Real part
+            this.plotRealPartTFSerieF.addSignal(
+                TFFourierSerie.partieReelle(),
+                "SF " + signalType + " (N = " + String.valueOf(n)+ ")",
+                false);
+
+            // Imaginary part
+            this.plotImaginaryPartTFSerieF.addSignal(
+                TFFourierSerie.partieImaginaire(),
+                "SF " + signalType + " (N = " + String.valueOf(n)+ ")",
+                false);
         }
         catch (Exception ex)
         {
             MessageBoxes.ShowError(this, ex.getMessage(), "Une erreur s'est produite");
         }
     }//GEN-LAST:event_buttonAfficherActionPerformed
+
+    private void buttonAjouterSerieFourierActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_buttonAjouterSerieFourierActionPerformed
+    {//GEN-HEADEREND:event_buttonAjouterSerieFourierActionPerformed
+        try
+        {
+            // Get discretiseur parameters
+            int samples = (int)spinnerSamplesDisc.getValue();
+            double origine = (double)this.spinnerOrigineDisc.getValue();
+            double duree = (double)this.spinnerDureeDisc.getValue();
+            Discretiseur discretiseur = new Discretiseur(samples, origine, duree);
+
+            // Get signal parameters
+            double periode = (double)this.spinnerPeriode.getValue();
+            double amplitude = (double)this.spinnerAmplitude.getValue();
+            SerieFourier sf;
+
+            // Create signal
+            String signalType = String.valueOf(this.comboBoxSignaux.getSelectedItem());
+            switch(signalType)
+            {
+                case "Carré":
+                    sf = new CarreSerieFourier();
+                    break;
+                case "Dents de scie":
+                    sf = new DentsScieSerieFourier();
+                    break;
+                case "Fonction A (exercice)":
+                    sf = new FonctionASerieFourier();
+                    break;
+                case "Fonction B (exercice)":
+                    sf = new FonctionBSerieFourier();
+                    break;
+                default:
+                    throw new Exception("Signal non reconnu");
+            }
+
+            // Fourier serie
+            int n = (int)this.spinnerNbTermesSerieFourier.getValue();
+            Signal fourierSerie = FourierSeriesBuilder.fourierSerie(sf, n, amplitude, periode, discretiseur);
+            this.plotSignalSerieFourier.addSignal(fourierSerie, "SF " + signalType + " (N = " + String.valueOf(n)+ ")", false);
+        }
+        catch (Exception ex)
+        {
+            MessageBoxes.ShowError(this, ex.getMessage(), "Une erreur s'est produite");
+        }
+    }//GEN-LAST:event_buttonAjouterSerieFourierActionPerformed
+    //</editor-fold>
+
+    //<editor-fold defaultstate="collapsed" desc="Private Functions">
+    private void appendFourierSerie() throws Exception
+    {
+
+    }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Main">
