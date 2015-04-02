@@ -147,6 +147,8 @@ public class MainFrame extends javax.swing.JFrame
         labelNbTermes = new javax.swing.JLabel();
         spinnerNbTermesSerieFourier = new javax.swing.JSpinner();
         buttonAjouterSerieFourier = new javax.swing.JButton();
+        labelPuissanceMoyenne = new javax.swing.JLabel();
+        labelPuissanceMoyenneValue = new javax.swing.JLabel();
         panelPlots = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -313,16 +315,23 @@ public class MainFrame extends javax.swing.JFrame
         panelOptions.add(buttonClearAll, gridBagConstraints);
 
         panelFourierSeries.setBorder(javax.swing.BorderFactory.createTitledBorder("Paramètres de la série de Fourier"));
-        panelFourierSeries.setLayout(new java.awt.GridBagLayout());
+        java.awt.GridBagLayout panelFourierSeriesLayout = new java.awt.GridBagLayout();
+        panelFourierSeriesLayout.columnWidths = new int[] {0, 5, 0};
+        panelFourierSeriesLayout.rowHeights = new int[] {0, 3, 0, 3, 0};
+        panelFourierSeries.setLayout(panelFourierSeriesLayout);
 
         labelNbTermes.setText("Nombre de termes :");
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         panelFourierSeries.add(labelNbTermes, gridBagConstraints);
 
         spinnerNbTermesSerieFourier.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(20), Integer.valueOf(0), null, Integer.valueOf(1)));
         gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         panelFourierSeries.add(spinnerNbTermesSerieFourier, gridBagConstraints);
@@ -336,11 +345,25 @@ public class MainFrame extends javax.swing.JFrame
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         panelFourierSeries.add(buttonAjouterSerieFourier, gridBagConstraints);
+
+        labelPuissanceMoyenne.setText("Puissance moyenne :");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        panelFourierSeries.add(labelPuissanceMoyenne, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        panelFourierSeries.add(labelPuissanceMoyenneValue, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -375,6 +398,7 @@ public class MainFrame extends javax.swing.JFrame
         this.periode = -1.0;
         this.amplitude = -1.0;
         this.signalType = null;
+        this.labelPuissanceMoyenneValue.setText("");
     }//GEN-LAST:event_buttonClearAllActionPerformed
 
     private void buttonAfficherActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_buttonAfficherActionPerformed
@@ -440,6 +464,10 @@ public class MainFrame extends javax.swing.JFrame
 
             // Get the number of terms of the Fourier serie
             int n = (int)this.spinnerNbTermesSerieFourier.getValue();
+
+            // Puissance Moyenne
+            double pm = FourierSeriesBuilder.puissanceMoyenne(serieFourier, n);
+            this.labelPuissanceMoyenneValue.setText(String.valueOf(pm));
 
             // Fourier serie
             Signal fourierSerie = FourierSeriesBuilder.fourierSerie(serieFourier, n, amplitude, periode, discretiseur);
@@ -540,6 +568,8 @@ public class MainFrame extends javax.swing.JFrame
     private javax.swing.JLabel labelNbTermes;
     private javax.swing.JLabel labelOrigine;
     private javax.swing.JLabel labelPeriode;
+    private javax.swing.JLabel labelPuissanceMoyenne;
+    private javax.swing.JLabel labelPuissanceMoyenneValue;
     private javax.swing.JLabel labelSamples;
     private javax.swing.JPanel panelDiscretiseur;
     private javax.swing.JPanel panelFourierSeries;
