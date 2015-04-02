@@ -39,7 +39,7 @@ public class FonctionA extends FonctionPeriodique
             }
             else
             {
-                return new Nombre((param <= 0) ? 0 : (2*param)*this.amplitude/this.periode(), 0.0);
+                return new Nombre((param <= 0) ? 0 : (2*param)*this.frequence*this.amplitude, 0.0);
             }
         }
     }

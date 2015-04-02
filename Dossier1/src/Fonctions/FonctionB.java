@@ -39,7 +39,7 @@ public class FonctionB extends FonctionPeriodique
             }
             else
             {
-                return new Nombre((1.0 - Math.cos((Math.PI*param)/this.periode()))*this.amplitude, 0.0);
+                return new Nombre((1.0 - Math.cos(Math.PI*param*this.frequence))*this.amplitude, 0.0);
             }
         }
     }
