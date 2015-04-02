@@ -1,6 +1,7 @@
 package GUI;
 
 import Fonctions.FonctionA;
+import Fonctions.FonctionB;
 import Utils.MessageBoxes;
 import java.awt.GridBagConstraints;
 import signaux.Discretiseur;
@@ -316,22 +317,20 @@ public class MainFrame extends javax.swing.JFrame
             switch(signalType)
             {
                 case "Carré":
-                    System.out.println("Afficher un carré");
                     this.signal = SignalPeriodique.getInstance(
                             SignalPeriodique.CARRE, amplitude,1/periode, 0.0, discretiseur);
                     break;
                 case "Dents de scie":
-                    System.out.println("Afficher un dents de scie");
                     this.signal = SignalPeriodique.getInstance(
                             SignalPeriodique.SCIE, amplitude, 1/periode, 0.0, discretiseur);
                     break;
                 case "Fonction A (exercice)":
-                    System.out.println("Afficher signal fonction A");
                     this.signal = SignalPeriodique.getInstance(
                             new FonctionA(amplitude, 1/periode, 0.0), discretiseur);
                     break;
                 case "Fonction B (exercice)":
-                    System.out.println("Afficher signal fonction B");
+                    this.signal = SignalPeriodique.getInstance(
+                            new FonctionB(amplitude, 1/periode, 0.0), discretiseur);
                     break;
                 default:
                     throw new Exception("Signal non reconnu");
