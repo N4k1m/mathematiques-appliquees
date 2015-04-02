@@ -34,40 +34,48 @@ public class MainFrame extends javax.swing.JFrame
         gbc.weighty = 1;
 
 
-        this.plotSignalSerieFourier = new SignalPanel("Signal de départ et série de Fourier", null, null);
+        this.plotSignalSerieFourier = new SignalPanel("Signal de départ et série de Fourier (SF)", null, null);
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
         gbc.weightx = 2;
         this.panelPlots.add(this.plotSignalSerieFourier, gbc);
 
-        this.plotSpectreSerieFourier = new SignalPanel("Spectre de la série de Fourier", null, null);
+        this.plotSpectreSerieFourier = new SignalPanel("Spectre de la série de Fourier (SF)", null, null);
         gbc.gridx = 2;
         gbc.gridy = 0;
         gbc.gridwidth = 1;
         gbc.weightx = 1;
         this.panelPlots.add(this.plotSpectreSerieFourier, gbc);
 
-        this.plotRealPartTFSerieF = new SignalPanel("Partie réelle de la TF de la série de Fourier", null, null);
+        this.plotRealPartTFSerieF = new SignalPanel("Partie réelle de la TF de la SF", null, null);
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 1;
         gbc.weightx = 1;
         this.panelPlots.add(this.plotRealPartTFSerieF, gbc);
 
-        this.plotImaginaryPartTFSerieF = new SignalPanel("Partie imaginaire de la TF de la série de Fourier", null, null);
+        this.plotImaginaryPartTFSerieF = new SignalPanel("Partie imaginaire de la TF de la SF", null, null);
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.gridwidth = 1;
         gbc.weightx = 1;
         this.panelPlots.add(this.plotImaginaryPartTFSerieF, gbc);
 
-        this.plotPhaseTFSerieF = new SignalPanel("Phase de la TF de la série de Fourier", null, null);
+        this.plotPhaseTFSerieF = new SignalPanel("Phase de la TF de la SF", null, null);
         gbc.gridx = 2;
         gbc.gridy = 1;
         gbc.gridwidth = 1;
         gbc.weightx = 1;
         this.panelPlots.add(this.plotPhaseTFSerieF, gbc);
+
+        // Private variables initialization
+        this.signal = null;
+        this.serieFourier = null;
+        this.discretiseur = null;
+        this.periode = -1.0;
+        this.amplitude = -1.0;
+        this.signalType = null;
 
         // Resize window to fit the preferred sizes and layouts
         this.pack();
@@ -94,12 +102,13 @@ public class MainFrame extends javax.swing.JFrame
         labelPeriode = new javax.swing.JLabel();
         spinnerPeriode = new javax.swing.JSpinner();
         buttonAfficher = new javax.swing.JButton();
-        labelNbTermesSerieFourier = new javax.swing.JLabel();
-        spinnerNbTermesSerieFourier = new javax.swing.JSpinner();
-        buttonAjouterSerieFourier = new javax.swing.JButton();
         labelAmplitude = new javax.swing.JLabel();
         spinnerAmplitude = new javax.swing.JSpinner();
         buttonClearAll = new javax.swing.JButton();
+        panelFourierSeries = new javax.swing.JPanel();
+        labelNbTermes = new javax.swing.JLabel();
+        spinnerNbTermesSerieFourier = new javax.swing.JSpinner();
+        buttonAjouterSerieFourier = new javax.swing.JButton();
         panelPlots = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -109,8 +118,8 @@ public class MainFrame extends javax.swing.JFrame
 
         panelOptions.setBorder(javax.swing.BorderFactory.createEmptyBorder(3, 3, 3, 3));
         java.awt.GridBagLayout panelOptionsLayout = new java.awt.GridBagLayout();
-        panelOptionsLayout.columnWidths = new int[] {0};
-        panelOptionsLayout.rowHeights = new int[] {0, 3, 0, 3, 0};
+        panelOptionsLayout.columnWidths = new int[] {0, 5, 0};
+        panelOptionsLayout.rowHeights = new int[] {0, 3, 0, 3, 0, 3, 0};
         panelOptions.setLayout(panelOptionsLayout);
 
         panelDiscretiseur.setBorder(javax.swing.BorderFactory.createTitledBorder("Paramètres du discretiseur"));
@@ -174,10 +183,10 @@ public class MainFrame extends javax.swing.JFrame
         gridBagConstraints.weightx = 1.0;
         panelOptions.add(panelDiscretiseur, gridBagConstraints);
 
-        panelSignals.setBorder(javax.swing.BorderFactory.createTitledBorder("Paramètre des signaux"));
+        panelSignals.setBorder(javax.swing.BorderFactory.createTitledBorder("Paramètres des signaux"));
         java.awt.GridBagLayout panelSignalsLayout = new java.awt.GridBagLayout();
         panelSignalsLayout.columnWidths = new int[] {0, 5, 0};
-        panelSignalsLayout.rowHeights = new int[] {0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0};
+        panelSignalsLayout.rowHeights = new int[] {0, 3, 0, 3, 0, 3, 0};
         panelSignals.setLayout(panelSignalsLayout);
 
         labelChoixSignal.setText("Choix du signal :");
@@ -222,41 +231,10 @@ public class MainFrame extends javax.swing.JFrame
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         panelSignals.add(buttonAfficher, gridBagConstraints);
-
-        labelNbTermesSerieFourier.setText("Nb termes série Fourier :");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        panelSignals.add(labelNbTermesSerieFourier, gridBagConstraints);
-
-        spinnerNbTermesSerieFourier.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        panelSignals.add(spinnerNbTermesSerieFourier, gridBagConstraints);
-
-        buttonAjouterSerieFourier.setText("Ajouter série Fourier");
-        buttonAjouterSerieFourier.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
-                buttonAjouterSerieFourierActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 10;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        panelSignals.add(buttonAjouterSerieFourier, gridBagConstraints);
 
         labelAmplitude.setText("Amplitude :");
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -291,10 +269,47 @@ public class MainFrame extends javax.swing.JFrame
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         panelOptions.add(buttonClearAll, gridBagConstraints);
+
+        panelFourierSeries.setBorder(javax.swing.BorderFactory.createTitledBorder("Paramètres de la série de Fourier"));
+        panelFourierSeries.setLayout(new java.awt.GridBagLayout());
+
+        labelNbTermes.setText("Nombre de termes :");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        panelFourierSeries.add(labelNbTermes, gridBagConstraints);
+
+        spinnerNbTermesSerieFourier.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        panelFourierSeries.add(spinnerNbTermesSerieFourier, gridBagConstraints);
+
+        buttonAjouterSerieFourier.setText("Ajouter série de Fourier");
+        buttonAjouterSerieFourier.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                buttonAjouterSerieFourierActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        panelFourierSeries.add(buttonAjouterSerieFourier, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        panelOptions.add(panelFourierSeries, gridBagConstraints);
 
         splitPaneMainFrame.setLeftComponent(panelOptions);
 
@@ -315,6 +330,13 @@ public class MainFrame extends javax.swing.JFrame
         this.plotRealPartTFSerieF.clear();
         this.plotImaginaryPartTFSerieF.clear();
         this.plotPhaseTFSerieF.clear();
+
+        this.signal = null;
+        this.serieFourier = null;
+        this.discretiseur = null;
+        this.periode = -1.0;
+        this.amplitude = -1.0;
+        this.signalType = null;
     }//GEN-LAST:event_buttonClearAllActionPerformed
 
     private void buttonAfficherActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_buttonAfficherActionPerformed
@@ -381,6 +403,9 @@ public class MainFrame extends javax.swing.JFrame
     {//GEN-HEADEREND:event_buttonAjouterSerieFourierActionPerformed
         try
         {
+            if (this.signal == null)
+                throw new Exception("Vous devez en premier générer un signal");
+
             // Get the number of terms of the Fourier serie
             int n = (int)this.spinnerNbTermesSerieFourier.getValue();
 
@@ -487,11 +512,12 @@ public class MainFrame extends javax.swing.JFrame
     private javax.swing.JLabel labelAmplitude;
     private javax.swing.JLabel labelChoixSignal;
     private javax.swing.JLabel labelDuree;
-    private javax.swing.JLabel labelNbTermesSerieFourier;
+    private javax.swing.JLabel labelNbTermes;
     private javax.swing.JLabel labelOrigine;
     private javax.swing.JLabel labelPeriode;
     private javax.swing.JLabel labelSamples;
     private javax.swing.JPanel panelDiscretiseur;
+    private javax.swing.JPanel panelFourierSeries;
     private javax.swing.JPanel panelOptions;
     private javax.swing.JPanel panelPlots;
     private javax.swing.JPanel panelSignals;
