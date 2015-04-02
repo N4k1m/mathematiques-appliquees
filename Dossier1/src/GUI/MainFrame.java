@@ -1,9 +1,11 @@
 package GUI;
 
+import Fonctions.FonctionA;
 import Utils.MessageBoxes;
 import java.awt.GridBagConstraints;
 import signaux.Discretiseur;
 import signaux.Signal;
+import signaux.SignalPeriodique;
 
 /**
  *
@@ -38,21 +40,21 @@ public class MainFrame extends javax.swing.JFrame
         gbc.weightx = 1;
         this.panelPlots.add(this.plotSpectreSerieFourier, gbc);
 
-        this.plotRealPartTFSerieF = new SignalPanel("Partie réelle de la transformée de Fourier de la série de Fourier", null, null);
+        this.plotRealPartTFSerieF = new SignalPanel("Partie réelle de la TF de la série de Fourier", null, null);
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 1;
         gbc.weightx = 1;
         this.panelPlots.add(this.plotRealPartTFSerieF, gbc);
 
-        this.plotImaginaryPartTFSerieF = new SignalPanel("Partie imaginaire de la transformée de Fourier de la série de Fourier", null, null);
+        this.plotImaginaryPartTFSerieF = new SignalPanel("Partie imaginaire de la TF de la série de Fourier", null, null);
         gbc.gridx = 1;
         gbc.gridy = 1;
         gbc.gridwidth = 1;
         gbc.weightx = 1;
         this.panelPlots.add(this.plotImaginaryPartTFSerieF, gbc);
 
-        this.plotPhaseTFSerieF = new SignalPanel("Phase de la transformée de Fourier de la série de Fourier", null, null);
+        this.plotPhaseTFSerieF = new SignalPanel("Phase de la TF de la série de Fourier", null, null);
         gbc.gridx = 2;
         gbc.gridy = 1;
         gbc.gridwidth = 1;
@@ -65,8 +67,7 @@ public class MainFrame extends javax.swing.JFrame
     //</editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
         splitPaneMainFrame = new javax.swing.JSplitPane();
@@ -87,6 +88,8 @@ public class MainFrame extends javax.swing.JFrame
         labelNbTermesSerieFourier = new javax.swing.JLabel();
         spinnerNbTermesSerieFourier = new javax.swing.JSpinner();
         buttonAjouterSerieFourier = new javax.swing.JButton();
+        labelAmplitude = new javax.swing.JLabel();
+        spinnerAmplitude = new javax.swing.JSpinner();
         buttonClearAll = new javax.swing.JButton();
         panelPlots = new javax.swing.JPanel();
 
@@ -164,8 +167,8 @@ public class MainFrame extends javax.swing.JFrame
 
         panelSignals.setBorder(javax.swing.BorderFactory.createTitledBorder("Paramètre des signaux"));
         java.awt.GridBagLayout panelSignalsLayout = new java.awt.GridBagLayout();
-        panelSignalsLayout.columnWidths = new int[] {0, 5, 0, 5, 0};
-        panelSignalsLayout.rowHeights = new int[] {0, 3, 0, 3, 0, 3, 0, 3, 0};
+        panelSignalsLayout.columnWidths = new int[] {0, 5, 0};
+        panelSignalsLayout.rowHeights = new int[] {0, 3, 0, 3, 0, 3, 0, 3, 0, 3, 0};
         panelSignals.setLayout(panelSignalsLayout);
 
         labelChoixSignal.setText("Choix du signal :");
@@ -201,16 +204,14 @@ public class MainFrame extends javax.swing.JFrame
         panelSignals.add(spinnerPeriode, gridBagConstraints);
 
         buttonAfficher.setText("Afficher");
-        buttonAfficher.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        buttonAfficher.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonAfficherActionPerformed(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridy = 8;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         panelSignals.add(buttonAfficher, gridBagConstraints);
@@ -218,7 +219,7 @@ public class MainFrame extends javax.swing.JFrame
         labelNbTermesSerieFourier.setText("Nb termes série Fourier :");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         panelSignals.add(labelNbTermesSerieFourier, gridBagConstraints);
@@ -226,7 +227,7 @@ public class MainFrame extends javax.swing.JFrame
         spinnerNbTermesSerieFourier.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         panelSignals.add(spinnerNbTermesSerieFourier, gridBagConstraints);
@@ -234,10 +235,26 @@ public class MainFrame extends javax.swing.JFrame
         buttonAjouterSerieFourier.setText("Ajouter série Fourier");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 8;
+        gridBagConstraints.gridy = 10;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         panelSignals.add(buttonAjouterSerieFourier, gridBagConstraints);
+
+        labelAmplitude.setText("Amplitude :");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        panelSignals.add(labelAmplitude, gridBagConstraints);
+
+        spinnerAmplitude.setModel(new javax.swing.SpinnerNumberModel(Double.valueOf(1.0d), Double.valueOf(1.0d), null, Double.valueOf(0.1d)));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        panelSignals.add(spinnerAmplitude, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
@@ -247,10 +264,8 @@ public class MainFrame extends javax.swing.JFrame
         panelOptions.add(panelSignals, gridBagConstraints);
 
         buttonClearAll.setText("Tout effacer");
-        buttonClearAll.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        buttonClearAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 buttonClearAllActionPerformed(evt);
             }
         });
@@ -291,18 +306,29 @@ public class MainFrame extends javax.swing.JFrame
             double origine = (double)this.spinnerOrigineDisc.getValue();
             double duree = (double)this.spinnerDureeDisc.getValue();
             Discretiseur discretiseur = new Discretiseur(samples, origine, duree);
+            
+            // Get signal parameters
+            double periode = (double)this.spinnerPeriode.getValue();
+            double amplitude = (double)this.spinnerAmplitude.getValue();
 
+            // Create signal
             String signalType = String.valueOf(this.comboBoxSignaux.getSelectedItem());
             switch(signalType)
             {
                 case "Carré":
-                    System.out.println("Afficher un carré d'A = 1");
+                    System.out.println("Afficher un carré");
+                    this.signal = SignalPeriodique.getInstance(
+                            SignalPeriodique.CARRE, amplitude,1/periode, 0.0, discretiseur);
                     break;
                 case "Dents de scie":
                     System.out.println("Afficher un dents de scie");
+                    this.signal = SignalPeriodique.getInstance(
+                            SignalPeriodique.SCIE, amplitude, 1/periode, 0.0, discretiseur);
                     break;
                 case "Fonction A (exercice)":
                     System.out.println("Afficher signal fonction A");
+                    this.signal = SignalPeriodique.getInstance(
+                            new FonctionA(amplitude, 1/periode, 0.0), discretiseur);
                     break;
                 case "Fonction B (exercice)":
                     System.out.println("Afficher signal fonction B");
@@ -310,6 +336,9 @@ public class MainFrame extends javax.swing.JFrame
                 default:
                     throw new Exception("Signal non reconnu");
             }
+            
+            // Display signal
+            this.plotSignalSerieFourier.addSignal(this.signal, signalType, true);
         }
         catch (Exception ex)
         {
@@ -366,6 +395,7 @@ public class MainFrame extends javax.swing.JFrame
     private javax.swing.JButton buttonAjouterSerieFourier;
     private javax.swing.JButton buttonClearAll;
     private javax.swing.JComboBox comboBoxSignaux;
+    private javax.swing.JLabel labelAmplitude;
     private javax.swing.JLabel labelChoixSignal;
     private javax.swing.JLabel labelDuree;
     private javax.swing.JLabel labelNbTermesSerieFourier;
@@ -376,6 +406,7 @@ public class MainFrame extends javax.swing.JFrame
     private javax.swing.JPanel panelOptions;
     private javax.swing.JPanel panelPlots;
     private javax.swing.JPanel panelSignals;
+    private javax.swing.JSpinner spinnerAmplitude;
     private javax.swing.JSpinner spinnerDureeDisc;
     private javax.swing.JSpinner spinnerNbTermesSerieFourier;
     private javax.swing.JSpinner spinnerOrigineDisc;
