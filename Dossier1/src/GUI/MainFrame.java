@@ -283,7 +283,7 @@ public class MainFrame extends javax.swing.JFrame
         gridBagConstraints.weightx = 1.0;
         panelFourierSeries.add(labelNbTermes, gridBagConstraints);
 
-        spinnerNbTermesSerieFourier.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(0), Integer.valueOf(0), null, Integer.valueOf(1)));
+        spinnerNbTermesSerieFourier.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(20), Integer.valueOf(0), null, Integer.valueOf(1)));
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
@@ -356,9 +356,6 @@ public class MainFrame extends javax.swing.JFrame
             periode = (double)this.spinnerPeriode.getValue();
             amplitude = (double)this.spinnerAmplitude.getValue();
 
-            // Get Fourier serie parameters
-            int n = (int)this.spinnerNbTermesSerieFourier.getValue();
-
             // Create signal
             signalType = String.valueOf(this.comboBoxSignaux.getSelectedItem());
             switch(signalType)
@@ -387,9 +384,6 @@ public class MainFrame extends javax.swing.JFrame
                     throw new Exception("Signal non reconnu");
             }
 
-            // Display Fourier series signals
-            this.appendFourierSeriesSignals(n);
-
             // Display signal
             this.plotSignalSerieFourier.addSignal(this.signal, signalType, false);
         }
@@ -409,49 +403,42 @@ public class MainFrame extends javax.swing.JFrame
             // Get the number of terms of the Fourier serie
             int n = (int)this.spinnerNbTermesSerieFourier.getValue();
 
-            this.appendFourierSeriesSignals(n);
+            // Fourier serie
+            Signal fourierSerie = FourierSeriesBuilder.fourierSerie(serieFourier, n, amplitude, periode, discretiseur);
+            this.plotSignalSerieFourier.addSignal(fourierSerie, "SF " + signalType + " (N = " + String.valueOf(n)+ ")", false);
+
+            // Get Fourier transformation of Fourier serie
+            Signal TFFourierSerie = Fourier.fourier(fourierSerie);
+
+            // Spectre
+            this.plotSpectreSerieFourier.addSignal(
+                TFFourierSerie.module(),
+                "SF " + signalType + " (N = " + String.valueOf(n)+ ")",
+                false);
+
+            // Phase
+            this.plotPhaseTFSerieF.addSignal(
+                TFFourierSerie.argument(),
+                "SF " + signalType + " (N = " + String.valueOf(n)+ ")",
+                false);
+
+            // Real part
+            this.plotRealPartTFSerieF.addSignal(
+                TFFourierSerie.partieReelle(),
+                "SF " + signalType + " (N = " + String.valueOf(n)+ ")",
+                false);
+
+            // Imaginary part
+            this.plotImaginaryPartTFSerieF.addSignal(
+                TFFourierSerie.partieImaginaire(),
+                "SF " + signalType + " (N = " + String.valueOf(n)+ ")",
+                false);
         }
         catch (Exception ex)
         {
             MessageBoxes.ShowError(this, ex.getMessage(), "Une erreur s'est produite");
         }
     }//GEN-LAST:event_buttonAjouterSerieFourierActionPerformed
-    //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="Private Functions">
-    private void appendFourierSeriesSignals(int n)
-    {
-        // Fourier serie
-        Signal fourierSerie = FourierSeriesBuilder.fourierSerie(serieFourier, n, amplitude, periode, discretiseur);
-        this.plotSignalSerieFourier.addSignal(fourierSerie, "SF " + signalType + " (N = " + String.valueOf(n)+ ")", false);
-
-        // Get Fourier transformation of Fourier serie
-        Signal TFFourierSerie = Fourier.fourier(fourierSerie);
-
-        // Spectre
-        this.plotSpectreSerieFourier.addSignal(
-            TFFourierSerie.module(),
-            "SF " + signalType + " (N = " + String.valueOf(n)+ ")",
-            false);
-
-        // Phase
-        this.plotPhaseTFSerieF.addSignal(
-            TFFourierSerie.argument(),
-            "SF " + signalType + " (N = " + String.valueOf(n)+ ")",
-            false);
-
-        // Real part
-        this.plotRealPartTFSerieF.addSignal(
-            TFFourierSerie.partieReelle(),
-            "SF " + signalType + " (N = " + String.valueOf(n)+ ")",
-            false);
-
-        // Imaginary part
-        this.plotImaginaryPartTFSerieF.addSignal(
-            TFFourierSerie.partieImaginaire(),
-            "SF " + signalType + " (N = " + String.valueOf(n)+ ")",
-            false);
-    }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="Main">
