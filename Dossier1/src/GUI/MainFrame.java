@@ -443,6 +443,33 @@ public class MainFrame extends javax.swing.JFrame
             int n = (int)this.spinnerNbTermesSerieFourier.getValue();
             Signal fourierSerie = FourierSeriesBuilder.fourierSerie(sf, n, amplitude, periode, discretiseur);
             this.plotSignalSerieFourier.addSignal(fourierSerie, "SF " + signalType + " (N = " + String.valueOf(n)+ ")", false);
+
+            // Get Fourier transformation of Fourier serie
+            Signal TFFourierSerie = Fourier.fourier(fourierSerie);
+
+            // Spectre
+            this.plotSpectreSerieFourier.addSignal(
+                TFFourierSerie.module(),
+                "SF " + signalType + " (N = " + String.valueOf(n)+ ")",
+                false);
+
+            // Phase
+            this.plotPhaseTFSerieF.addSignal(
+                TFFourierSerie.argument(),
+                "SF " + signalType + " (N = " + String.valueOf(n)+ ")",
+                false);
+
+            // Real part
+            this.plotRealPartTFSerieF.addSignal(
+                TFFourierSerie.partieReelle(),
+                "SF " + signalType + " (N = " + String.valueOf(n)+ ")",
+                false);
+
+            // Imaginary part
+            this.plotImaginaryPartTFSerieF.addSignal(
+                TFFourierSerie.partieImaginaire(),
+                "SF " + signalType + " (N = " + String.valueOf(n)+ ")",
+                false);
         }
         catch (Exception ex)
         {
