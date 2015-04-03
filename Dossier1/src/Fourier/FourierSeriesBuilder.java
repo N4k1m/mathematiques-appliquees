@@ -40,7 +40,7 @@ public abstract class FourierSeriesBuilder
 
         // sum ((a_n)^2 + (b_n)^2)
         double sum = 0.0;
-        for (int i = 0; i <= n; ++i)
+        for (int i = 1; i <= n; i++)
             sum += (Math.pow(sf.getCoefficientAn(i), 2) + Math.pow(sf.getCoefficientBn(i), 2));
 
         return a02 + 0.5*sum;
