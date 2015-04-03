@@ -37,7 +37,7 @@ public class MainFrame extends javax.swing.JFrame
 
         XYItemRenderer renderer;
 
-        this.plotSignalSerieFourier = new SignalPanel("Signal de départ et série de Fourier (SF)", null, null);
+        this.plotSignalSerieFourier = new SignalPanel("Signal de départ et séries de Fourier (SF)", null, null);
         renderer = this.plotSignalSerieFourier.getChartPanel().getChart().getXYPlot().getRenderer();
         renderer.setSeriesPaint(0, Color.red);
         renderer.setSeriesPaint(1, Color.blue);
@@ -51,7 +51,7 @@ public class MainFrame extends javax.swing.JFrame
         gbc.weightx = 2;
         this.panelPlots.add(this.plotSignalSerieFourier, gbc);
 
-        this.plotSpectreSerieFourier = new SignalPanel("Spectre de la série de Fourier (SF)", null, null);
+        this.plotSpectreSerieFourier = new SignalPanel("Spectre des séries de Fourier (SF)", null, null);
         renderer = this.plotSpectreSerieFourier.getChartPanel().getChart().getXYPlot().getRenderer();
         renderer.setSeriesPaint(0, Color.blue);
         renderer.setSeriesPaint(1, Color.yellow);
@@ -65,7 +65,7 @@ public class MainFrame extends javax.swing.JFrame
         gbc.weightx = 1;
         this.panelPlots.add(this.plotSpectreSerieFourier, gbc);
 
-        this.plotRealPartTFSerieF = new SignalPanel("Partie réelle de la TF de la SF", null, null);
+        this.plotRealPartTFSerieF = new SignalPanel("Partie réelle des TF des Séries de F.", null, null);
         renderer = this.plotRealPartTFSerieF.getChartPanel().getChart().getXYPlot().getRenderer();
         renderer.setSeriesPaint(0, Color.blue);
         renderer.setSeriesPaint(1, Color.yellow);
@@ -79,7 +79,7 @@ public class MainFrame extends javax.swing.JFrame
         gbc.weightx = 1;
         this.panelPlots.add(this.plotRealPartTFSerieF, gbc);
 
-        this.plotImaginaryPartTFSerieF = new SignalPanel("Partie imaginaire de la TF de la SF", null, null);
+        this.plotImaginaryPartTFSerieF = new SignalPanel("Partie imaginaire des TF des séries de F.", null, null);
         renderer = this.plotImaginaryPartTFSerieF.getChartPanel().getChart().getXYPlot().getRenderer();
         renderer.setSeriesPaint(0, Color.blue);
         renderer.setSeriesPaint(1, Color.yellow);
